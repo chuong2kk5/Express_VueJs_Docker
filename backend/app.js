@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const productRoutes = require('./routes/productRoutes');
+const categoryRoutes = require('./routes/categoryRoutes');
 const { connectDB } = require('./config/db');
 const { initMinio } = require('./config/minio');
 
@@ -15,6 +16,8 @@ app.get('/health', (req, res) => {
 });
 
 app.use('/api/products', productRoutes);
+app.use('/api/categories', categoryRoutes);
+
 
 connectDB();
 initMinio();

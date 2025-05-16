@@ -12,21 +12,22 @@ class Product {
         return rows[0];
     }
 
-    static async create({ name, description, price, image_url }) {
+    static async create({ name, slug, description, price, image_url, category_id }) {
         const [result] = await pool.query(
-            'INSERT INTO products (name, description, price, image_url) VALUES (?, ?, ?, ?)',
-            [name, description, price, image_url]
+            'INSERT INTO products (name, slug, description, price, image_url, category_id) VALUES (?, ?, ?, ?, ?, ?)',
+            [name, slug, description, price, image_url, category_id]
         );
         return this.findById(result.insertId);
     }
 
-    static async update(id, { name, description, price, image_url }) {
-        // Get current product to delete old image if needed
+    static async update(id, { name, slug, description, price, image_url, category_id }) {
         const product = await this.findById(id);
 
         await pool.query(
-            'UPDATE products SET name = ?, description = ?, price = ?, image_url = ? WHERE id = ?',
-            [name, description, price, image_url, id]
+            `UPDATE products 
+             SET name = ?, slug = ?, description = ?, price = ?, image_url = ?, category_id = ? 
+             WHERE id = ?`,
+            [name, slug, description, price, image_url, category_id, id]
         );
 
         // Delete old image if it's different from new one
@@ -45,7 +46,6 @@ class Product {
         const product = await this.findById(id);
         if (!product) return null;
 
-        // Delete associated image
         if (product.image_url) {
             try {
                 await deleteFile(product.image_url);

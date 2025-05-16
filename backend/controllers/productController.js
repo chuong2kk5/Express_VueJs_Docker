@@ -1,7 +1,7 @@
 const Product = require('../models/productModel');
 const { uploadFile } = require('../config/minio');
 const { uploadSingleImage } = require('../middlewares/uploadMiddleware');
-
+const slugify = require('slugify');  
 exports.getAllProducts = async (req, res) => {
     try {
         const products = await Product.findAll();
@@ -30,14 +30,24 @@ exports.createProduct = async (req, res) => {
         }
 
         try {
-            const { name, description, price } = req.body;
+            const { name, description, price, category_id } = req.body;
             let image_url = null;
 
             if (req.file) {
                 image_url = await uploadFile(req.file);
             }
 
-            const product = await Product.create({ name, description, price, image_url });
+            const slug = slugify(name, { lower: true, strict: true });
+
+            const product = await Product.create({
+                name,
+                slug,
+                description,
+                price,
+                image_url,
+                category_id: category_id || null
+            });
+
             res.status(201).json(product);
         } catch (error) {
             res.status(500).json({ error: error.message });
@@ -52,33 +62,30 @@ exports.updateProduct = async (req, res) => {
         }
 
         try {
-            const { name, description, price } = req.body;
+            const { name, description, price, category_id } = req.body;
             let image_url = null;
 
             if (req.file) {
                 image_url = await uploadFile(req.file);
             }
 
-            // If no new image uploaded, keep the existing one
-            if (!image_url) {
-                const existingProduct = await Product.findById(req.params.id);
-                if (existingProduct) {
-                    image_url = existingProduct.image_url;
-                }
-            }
-
-            const product = await Product.update(req.params.id, {
-                name,
-                description,
-                price,
-                image_url
-            });
-
-            if (!product) {
+            const existingProduct = await Product.findById(req.params.id);
+            if (!existingProduct) {
                 return res.status(404).json({ error: 'Product not found' });
             }
 
-            res.json(product);
+            const slug = slugify(name || existingProduct.name, { lower: true, strict: true });
+
+            const updatedProduct = await Product.update(req.params.id, {
+                name: name || existingProduct.name,
+                slug,
+                description: description || existingProduct.description,
+                price: price || existingProduct.price,
+                image_url: image_url || existingProduct.image_url,
+                category_id: category_id || existingProduct.category_id
+            });
+
+            res.json(updatedProduct);
         } catch (error) {
             res.status(500).json({ error: error.message });
         }
