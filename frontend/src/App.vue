@@ -1,12 +1,11 @@
 <template>
-  <DefaultLayout />
-  <!-- hieenj thi san pham -->
-  <ProductList />
-  <router-view />
+  <DefaultLayout>
+    <ProductList />
+    <router-view />
+  </DefaultLayout>
 </template>
 
 <script setup>
 import DefaultLayout from './layouts/DefaultLayout.vue';
-import ProductList from './components/ProductList.vue';
-
+import ProductList from './views/ProductList.vue';
 </script>

@@ -3,14 +3,14 @@
         <nav
             class="navbar navbar-expand-lg navbar-light border-bottom tw-sticky tw-top-0 tw-z-50 tw-bg-white tw-shadow-sm">
             <div class="container">
-                <RouterLink to="/" class="navbar-brand">NGTHANHVU</RouterLink>
+                <RouterLink to="/" class="navbar-brand">APP</RouterLink>
                 <div class="navbar-collapse d-flex justify-content-center">
                     <ul class="navbar-nav">
                         <li class="nav-item">
                             <router-link to="/" class="nav-link tw-font-semibold">Trang chủ</router-link>
                         </li>
                         <li class="nav-item">
-                            <router-link to="/product" class="nav-link tw-font-semibold">Sản phẩm</router-link>
+                            <router-link to="/products" class="nav-link tw-font-semibold">Sản phẩm</router-link>
                         </li>
                         <li class="nav-item">
                             <router-link to="#" class="nav-link tw-font-semibold">Về chúng tôi</router-link>
@@ -40,7 +40,7 @@
         <footer class="tw-bg-white tw-text-gray-600 tw-py-4 tw-border-t">
             <div class="tw-grid tw-grid-cols-2">
                 <div class="tw-flex tw-items-center tw-justify-center">
-                    <p>© 2023 Nghanhvu. All rights reserved.</p>
+                    <p>© 2023 APP. All rights reserved.</p>
                 </div>
                 <div class="tw-flex tw-items-center tw-justify-center">
                     <p>Privacy Policy</p>
