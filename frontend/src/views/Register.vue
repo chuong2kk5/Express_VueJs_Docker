@@ -59,19 +59,17 @@ export default {
         }
 
         const data = await res.json();
-
           await Swal.fire({
           toast: true,
           position: 'top-end',
           icon: 'success',
-          title: 'Đăng ký thành công!',
+          title: 'Đăng ký thành công, chuyển hướng đến trang đăng nhập',
           showConfirmButton: false,
-          timer: 2000,
+          timer: 1000,
           timerProgressBar: true,
         });
 
 
-        // Chuyển về trang đăng nhập
         this.$router.push('/login');
 
         // Reset form

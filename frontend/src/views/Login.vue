@@ -1,4 +1,4 @@
-<template>
+ <template>
   <div class="auth-form">
     <h2>Đăng nhập</h2>
     <form @submit.prevent="submitLogin">
@@ -12,12 +12,17 @@
     </form>
     <p>
       Chưa có tài khoản?
-        <router-link to="/register" class="text-blue-600 hover:underline">Đăng ký</router-link>
+      <router-link to="/register" class="text-blue-600 hover:underline">Đăng ký</router-link>
     </p>
   </div>
 </template>
 
 <script>
+import Swal from 'sweetalert2';
+import { useUserStore } from "@/stores/user";
+
+
+
 export default {
   name: "LoginForm",
   data() {
@@ -27,9 +32,46 @@ export default {
     };
   },
   methods: {
-    submitLogin() {
-      // Xử lý đăng nhập, ví dụ gọi API
-      alert(`Đăng nhập với Email: ${this.email}`);
+    async submitLogin() {
+      const userStore = useUserStore();
+
+      try {
+        const res = await fetch("http://localhost:3000/api/auth/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: this.email,
+            password: this.password,
+          }),
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          Swal.fire('Lỗi đăng nhập', data.error || 'Email hoặc mật khẩu sai', 'error');
+          return;
+        }
+
+       userStore.setUser(data.user, data.token);
+
+
+        await Swal.fire({
+          toast: true,
+          position: 'top-end',
+          icon: 'success',
+          title: 'Đăng nhập thành công!',
+          showConfirmButton: false,
+          timer: 1000,
+          timerProgressBar: true,
+        });
+
+        this.$router.push('/');
+
+      } catch (error) {
+        Swal.fire('Lỗi kết nối', error.message, 'error');
+      }
     },
   },
 };

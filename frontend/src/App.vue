@@ -1,11 +1,6 @@
 <template>
-  <DefaultLayout>
-    <ProductList />
-    <router-view />
-  </DefaultLayout>
+  <router-view />
 </template>
 
 <script setup>
-import DefaultLayout from './layouts/DefaultLayout.vue';
-import ProductList from './views/ProductList.vue';
 </script>
