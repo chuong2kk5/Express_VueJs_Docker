@@ -5,6 +5,7 @@ class Category {
         const [rows] = await pool.query('SELECT * FROM categories');
         return rows;
     }
+    
 
     static async findById(id) {
         const [rows] = await pool.query('SELECT * FROM categories WHERE id = ?', [id]);

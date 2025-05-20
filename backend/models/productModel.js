@@ -2,10 +2,23 @@ const { pool } = require('../config/db');
 const { deleteFile } = require('../config/minio');
 
 class Product {
-    static async findAll() {
-        const [rows] = await pool.query('SELECT * FROM products');
-        return rows;
-    }
+static async findAll() {
+    const [rows] = await pool.query(`
+        SELECT 
+            products.*, 
+            categories.name AS category_name 
+        FROM 
+            products 
+        LEFT JOIN 
+            categories 
+        ON 
+            products.category_id = categories.id
+    `);
+    return rows;
+}
+
+
+
 
     static async findById(id) {
         const [rows] = await pool.query('SELECT * FROM products WHERE id = ?', [id]);
